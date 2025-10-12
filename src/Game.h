@@ -13,13 +13,28 @@ class Game
 	bool init();
 	void update(float dt);
 	void render();
-	void mouseClicked(sf::Event event);
+	void mousePressed(sf::Event event);
+	void mouseReleased(sf::Event event);
 	void keyPressed(sf::Event event);
+	void newAnimal();
+	void dragSprite(sf::Sprite* sprite);
 
 	private:
 	sf::RenderWindow& window;
+	sf::Sprite* character;
+	sf::Sprite* passport;
+	sf::Texture* animals = new sf::Texture[3];
+	sf::Texture* passports = new sf::Texture[3];
+	sf::Sprite* dragged = nullptr;
+	sf::Vector2f drag_offset;
+	bool passport_accepted;
+	bool passport_rejected;
+	bool should_accept;
+
+
+
 	GameObject background;
-	GameObject character;
+	//GameObject character;
 
 };
 
