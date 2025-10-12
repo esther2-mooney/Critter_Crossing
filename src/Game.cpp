@@ -51,6 +51,11 @@ void Game::keyPressed(sf::Event event)
 	{
 		character.changeSprite();
 	}
+	if (event.key.code == sf::Keyboard::P)
+	{
+		int random = rand() % 30;
+		std::cout << random << "\n";
+	}
 }
 
 
