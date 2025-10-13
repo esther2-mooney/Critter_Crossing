@@ -13,22 +13,25 @@ Game::~Game()
 	delete[] animals;
 	delete[] passports;
 	delete character;
-	delete passport;
+	delete passport_character;
 
 }
 
 bool Game::init()
 {
 	character = new sf::Sprite;
-	passport = new sf::Sprite;
+	passport_character = new sf::Sprite;
 
-	animals[0].loadFromFile("../Data/c_animals/penguin.png");
-	animals[1].loadFromFile("../Data/c_animals/moose.png");
+	passport.initSprite();
+	passport.changeSprite();
+
+	animals[0].loadFromFile("../Data/Images/c_animals/penguin.png");
+	animals[1].loadFromFile("../Data/Images/c_animals/moose.png");
 	animals[2].loadFromFile("../Data/c_animals/zebra.png");
 
-	passports[0].loadFromFile("../Data/s_animals/penguin.png");
-	passports[1].loadFromFile("../Data/s_animals/moose.png");
-	passports[2].loadFromFile("../Data/s_animals/zebra.png");
+	passports[0].loadFromFile("../Data/Images/s_animals/penguin.png");
+	passports[1].loadFromFile("../Data/Images/s_animals/moose.png");
+	passports[2].loadFromFile("../Data/Images/s_animals/zebra.png");
 
 
 
@@ -67,9 +70,9 @@ void Game::newAnimal()
 	character->setScale(1.8, 1.8);
 	character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
 
-	passport->setTexture(animals[passport_index], true);
-	passport->setScale(0.6, 0.6);
-	passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
+	passport_character->setTexture(animals[passport_index], true);
+	passport_character->setScale(0.6, 0.6);
+	passport_character->setPosition(window.getSize().x / 2, window.getSize().y / 3);
 }
 
 void Game::dragSprite(sf::Sprite* sprite)
@@ -100,7 +103,9 @@ void Game::render()
 	*/
 
 	window.draw(*character);
-	window.draw(*passport);
+	//window.draw(*passport_character);
+	passport.render(window);
+
 }
 
 void Game::mousePressed(sf::Event event)
@@ -111,16 +116,15 @@ void Game::mousePressed(sf::Event event)
 	if (event.mouseButton.button == sf::Mouse::Left)
 	{
 
-		if (passport->getGlobalBounds().contains(clickf))
+		if (passport_character->getGlobalBounds().contains(clickf))
 		{
-			dragged = passport;
-			drag_offset = clickf - passport->getPosition();
+			dragged = passport_character;
 		}
 		if (character->getGlobalBounds().contains(clickf))
 		{
 			dragged = character;
-			drag_offset = clickf - character->getPosition();
 		}
+		drag_offset = clickf - dragged->getPosition();
 	}
 }
 
@@ -129,7 +133,7 @@ void Game::mouseReleased(sf::Event event)
 	sf::Vector2i click = sf::Mouse::getPosition(window);
 	sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
 
-	if (passport->getGlobalBounds().contains(clickf))
+	if (passport_character->getGlobalBounds().contains(clickf))
 	{
 		dragged = nullptr;
 	}
@@ -145,14 +149,11 @@ void Game::keyPressed(sf::Event event)
 	{
 		//character.changeSprite();
 	}
-	if (event.key.code == sf::Keyboard::P)
-	{
-		int random = rand() % 30;
-		std::cout << random << "\n";
-	}
+
 	if (event.key.code == sf::Keyboard::K)
 	{
-		newAnimal();
+		//newAnimal();
+		passport.changeSprite();
 	}
 }
 
