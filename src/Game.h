@@ -19,6 +19,7 @@ class Game
 	void keyPressed(sf::Event event);
 	void newAnimal();
 	void dragSprite(sf::Sprite* sprite);
+	void dragPassport(PassportObject passport);
 
 	private:
 	sf::RenderWindow& window;

@@ -40,11 +40,10 @@ bool Game::init()
 	//init background
 	background.initSprite("../Data/Images/background.png");
 	background.getSprite()->setPosition(0, 0);
-	/*
+
 	//init character
-	character.changeSprite();
-	character.getSprite()->setPosition(0, 0);
-	*/
+
+
 
 	return true;
 }
@@ -86,25 +85,34 @@ void Game::dragSprite(sf::Sprite* sprite)
 	}
 }
 
+void Game::dragPassport(PassportObject passport)
+{	//MAKE IT WORK WITH OBJECT
+	if (passport.getASprite() != nullptr)
+	{
+		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+		sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
+		passport.changePosition(mouse_positionf - drag_offset);
+	}
+}
+
 
 void Game::update(float dt)
 {
+	//std::cout << passport.position.x << ", " << passport.position.y << "\n";
 	if (dragged != nullptr)
 	{
 		dragSprite(dragged);
+		dragPassport(passport);
 	}
 }
 
 void Game::render()
 {
 	window.draw(*background.getSprite());
-	/*
-	window.draw(*character.getSprite());
-	*/
 
 	window.draw(*character);
-	//window.draw(*passport_character);
-	passport.render(window);
+	window.draw(*passport_character);
+	//passport.render(window);
 
 }
 
@@ -115,7 +123,6 @@ void Game::mousePressed(sf::Event event)
 
 	if (event.mouseButton.button == sf::Mouse::Left)
 	{
-
 		if (passport_character->getGlobalBounds().contains(clickf))
 		{
 			dragged = passport_character;
@@ -124,7 +131,16 @@ void Game::mousePressed(sf::Event event)
 		{
 			dragged = character;
 		}
-		drag_offset = clickf - dragged->getPosition();
+		/*
+		if (passport.
+			getASprite()->getGlobalBounds().contains(clickf))
+		{
+			dragged = passport.getASprite();
+		}*/
+		if (dragged != nullptr)
+		{
+			drag_offset = clickf - dragged->getPosition();
+		}
 	}
 }
 
@@ -141,19 +157,31 @@ void Game::mouseReleased(sf::Event event)
 	{
 		dragged = nullptr;
 	}
+	if (passport.getASprite()->getGlobalBounds().contains(clickf))
+	{
+		dragged = nullptr;
+	}
 }
 
 void Game::keyPressed(sf::Event event)
 {
+	if (event.key.code == sf::Keyboard::Escape)
+	{
+		window.close();
+	}
 	if (event.key.code == sf::Keyboard::Enter)
 	{
-		//character.changeSprite();
+		passport.changeSprite();
 	}
 
 	if (event.key.code == sf::Keyboard::K)
 	{
-		//newAnimal();
+		newAnimal();
 		passport.changeSprite();
+	}
+	if (event.key.code == sf::Keyboard::Q)
+	{
+		std::cout << passport.position.x << ", " << passport.position.y << "\n";
 	}
 }
 

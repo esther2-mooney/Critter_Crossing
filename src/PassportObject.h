@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class PassportObject : public GameObject
 {
@@ -8,6 +9,9 @@ class PassportObject : public GameObject
 	void initSprite();
 	void changeSprite();
 	void render(sf::RenderWindow& window);
+	sf::Sprite* getASprite();
+	void changePosition(sf::Vector2f input_position);
+	sf::Vector2f position;
 
 	private:
 	GameObject front;
