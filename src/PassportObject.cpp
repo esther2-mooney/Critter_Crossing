@@ -1,48 +1,74 @@
 #include "PassportObject.h"
-#include <iostream>
 
 void PassportObject::initSprite()
 {
-	position = {0,0};
 	back.initSprite("../Data/Images/passport_back.png");
 	back.getSprite()->setScale(0.4, 0.4);
+	back.getSprite()->setPosition(position);
+	changePhoto();
+	photo.getSprite()->setColor(sf::Color::Blue);
 	front.initSprite("../Data/Images/passport_front.png");
 	front.getSprite()->setScale(0.4, 0.4);
-	character.initSprite("../Data/c_animals/moose.png");
+	front.getSprite()->setPosition(position);
 }
 
-void PassportObject::changeSprite()
+void PassportObject::generateCharacter()
 {
-	int random = rand() % 30;
-	int randomNum = rand() % 2;
-	if (randomNum == 0)
+	int animal_index = rand() % 30;
+	int shape_index = rand() % 2;
+	if (shape_index == 0)
 	{
-		character.initSprite("../Data/c_animals/" + animals[random] + ".png");
+		character.initSprite("../Data/Images/c_animals/" + animals[animal_index] + ".png");
 	}
-	else if (randomNum == 1)
+	else if (shape_index == 1)
 	{
-		character.initSprite("../Data/s_animals/" + animals[random] + ".png");
+		character.initSprite("../Data/Images/s_animals/" + animals[animal_index] + ".png");
 	}
+	photo.getSprite()->setScale(0.8, 0.8);
 }
 
-void PassportObject::render(sf::RenderWindow& window)
+void PassportObject::changePhoto()
+{
+	position = {0,0};
+	int randAnimal = rand() % 30;
+	int randShape = rand() % 2;
+	if (randShape == 0)
+	{
+		photo.initSprite("../Data/Images/c_animals/" + animals[randAnimal] + ".png");
+	}
+	else if (randShape == 1)
+	{
+		photo.initSprite("../Data/Images/s_animals/" + animals[randAnimal] + ".png");
+	}
+	photo.getSprite()->setScale(0.8, 0.8);
+	offset.x = (285 * 0.4) - photo.getSprite()->getGlobalBounds().width / 2;
+	offset.y = (1050 * 0.4) - photo.getSprite()->getGlobalBounds().height / 2;
+}
+
+void PassportObject::renderPassport(sf::RenderWindow& window)
 {
 	back.getSprite()->setPosition(position);
-	front.getSprite()->setPosition(position);
-	character.getSprite()->setPosition(position.x + (300 * front.getSprite()->getScale().x)
-		- character.getSprite()->getGlobalBounds().width / 2, position.y +
-		(300 * front.getSprite()->getScale().y) - character.getSprite()->getGlobalBounds().height / 2);
 	window.draw(*back.getSprite());
-	window.draw(*character.getSprite());
+	photo.getSprite()->setPosition(position.x + offset.x, position.y + offset.y);
+	window.draw(*photo.getSprite());
+	front.getSprite()->setPosition(position);
 	window.draw(*front.getSprite());
 }
 
-sf::Sprite* PassportObject::getASprite()
+void PassportObject::dragPassport(sf::RenderWindow& window, sf::Vector2f drag_offset)
+{
+	sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+	sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
+	sf::Vector2f drag_position = mouse_positionf - drag_offset;
+	position = {drag_position.x, drag_position.y};
+}
+
+sf::Sprite* PassportObject::getSprite()
 {
 	return front.getSprite();
 }
 
-void PassportObject::changePosition(sf::Vector2f input_position)
-{
-	position = input_position;
-}
+void PassportObject::comparePassport()
+{}
+
+

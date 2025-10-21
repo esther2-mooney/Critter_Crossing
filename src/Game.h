@@ -19,13 +19,11 @@ class Game
 	void keyPressed(sf::Event event);
 	void newAnimal();
 	void dragSprite(sf::Sprite* sprite);
-	void dragPassport(PassportObject passport);
 
 	private:
 	sf::RenderWindow& window;
 	sf::Sprite* character;
 	sf::Sprite* passport_character;
-	PassportObject passport;
 	sf::Texture* animals = new sf::Texture[3];
 	sf::Texture* passports = new sf::Texture[3];
 	sf::Sprite* dragged = nullptr;
@@ -37,7 +35,7 @@ class Game
 
 
 	GameObject background;
-	//GameObject character;
+	PassportObject passport;
 
 };
 
