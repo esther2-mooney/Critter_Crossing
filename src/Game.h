@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
+#include "PassportObject.h"
 
 class Game
 {
@@ -22,7 +23,7 @@ class Game
 	private:
 	sf::RenderWindow& window;
 	sf::Sprite* character;
-	sf::Sprite* passport;
+	sf::Sprite* passport_character;
 	sf::Texture* animals = new sf::Texture[3];
 	sf::Texture* passports = new sf::Texture[3];
 	sf::Sprite* dragged = nullptr;
@@ -34,7 +35,7 @@ class Game
 
 
 	GameObject background;
-	//GameObject character;
+	PassportObject passport;
 
 };
 
