@@ -5,8 +5,7 @@ void PassportObject::initSprite()
 	back.initSprite("../Data/Images/passport_back.png");
 	back.getSprite()->setScale(0.4, 0.4);
 	back.getSprite()->setPosition(position);
-	changePhoto();
-	photo.getSprite()->setColor(sf::Color::Blue);
+	generateCharacter();
 	front.initSprite("../Data/Images/passport_front.png");
 	front.getSprite()->setScale(0.4, 0.4);
 	front.getSprite()->setPosition(position);
@@ -14,8 +13,17 @@ void PassportObject::initSprite()
 
 void PassportObject::generateCharacter()
 {
-	int animal_index = rand() % 30;
-	int shape_index = rand() % 2;
+	character.getSprite()->setPosition(50, 100);
+	if (rand() % 2 == 0)
+	{
+		accept = false;
+	}
+	else
+	{
+		accept = true;
+	}
+	animal_index = rand() % 30;
+	shape_index = rand() % 2;
 	if (shape_index == 0)
 	{
 		character.initSprite("../Data/Images/c_animals/" + animals[animal_index] + ".png");
@@ -24,12 +32,54 @@ void PassportObject::generateCharacter()
 	{
 		character.initSprite("../Data/Images/s_animals/" + animals[animal_index] + ".png");
 	}
-	photo.getSprite()->setScale(0.8, 0.8);
+	character.getSprite()->setScale(1.5, 1.5);
+	changePhoto();
 }
 
 void PassportObject::changePhoto()
 {
-	position = {0,0};
+	position = {500,100};
+	photo.getSprite()->setScale(0.8, 0.8);
+	if (accept)
+	{ // if the passport should be accepted
+		ifShapeIndex(photo, animal_index, shape_index);
+	}
+	else
+	{ // if the passport shouldnt be accepted
+		if (rand() % 2 == 0)
+		{ // 50% chance for the picture to be right anyway
+			ifShapeIndex(photo, animal_index, shape_index);
+		}
+		else
+		{ // 50% chance for the image to be wrong
+			int randAnimal = rand() % 30;
+			if (randAnimal == animal_index)
+			{
+				if (shape_index == 0)
+				{
+					shape_index = 1;
+				}
+				else
+				{
+					shape_index = 0;
+				}
+			}
+			else
+			{
+				shape_index = rand() % 2;
+			}
+			ifShapeIndex(photo, animal_index, shape_index);
+		}
+		int random_chance = rand() % 3;
+		if (random_chance == 0)
+		{
+			// each odd means 1 text item is false
+			// shape, colour or snimal
+		}
+
+
+	}
+
 	int randAnimal = rand() % 30;
 	int randShape = rand() % 2;
 	if (randShape == 0)
@@ -40,13 +90,13 @@ void PassportObject::changePhoto()
 	{
 		photo.initSprite("../Data/Images/s_animals/" + animals[randAnimal] + ".png");
 	}
-	photo.getSprite()->setScale(0.8, 0.8);
 	offset.x = (285 * 0.4) - photo.getSprite()->getGlobalBounds().width / 2;
 	offset.y = (1050 * 0.4) - photo.getSprite()->getGlobalBounds().height / 2;
 }
 
 void PassportObject::renderPassport(sf::RenderWindow& window)
 {
+	window.draw(*character.getSprite());
 	back.getSprite()->setPosition(position);
 	window.draw(*back.getSprite());
 	photo.getSprite()->setPosition(position.x + offset.x, position.y + offset.y);
@@ -71,4 +121,15 @@ sf::Sprite* PassportObject::getSprite()
 void PassportObject::comparePassport()
 {}
 
+void PassportObject::ifShapeIndex(GameObject image, int shape, int animal)
+{
+	if (shape == 0)
+	{
+		image.initSprite("../Data/Images/c_animals/" + animals[animal] + ".png");
+	}
+	else
+	{
+		image.initSprite("../Data/Images/s_animals/" + animals[animal] + ".png");
+	}
+}
 

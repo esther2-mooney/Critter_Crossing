@@ -18,7 +18,7 @@ Game::~Game()
 	*/
 }
 
- bool Game::init()
+bool Game::init()
 {
 
 	//init background
@@ -108,7 +108,7 @@ void Game::keyPressed(sf::Event event)
 	}
 	if (event.key.code == sf::Keyboard::Enter)
 	{
-		passport.changePhoto();
+		passport.generateCharacter();
 	}
 }
 
