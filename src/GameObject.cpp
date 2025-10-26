@@ -3,7 +3,7 @@
 
 GameObject::GameObject()
 {
-	font.loadFromFile("../Data/Fonts/pixelated.ttf");
+	font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf");
 }
 GameObject::~GameObject()
 {}

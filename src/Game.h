@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
 #include "PassportObject.h"
+#include "CharacterObject.h"
 
 class Game
 {
@@ -17,25 +18,22 @@ class Game
 	void mousePressed(sf::Event event);
 	void mouseReleased(sf::Event event);
 	void keyPressed(sf::Event event);
-	void newAnimal();
-	void dragSprite(sf::Sprite* sprite);
+	//void dragSprite(sf::Sprite* sprite);
 
 	private:
 	sf::RenderWindow& window;
-	sf::Sprite* character;
-	sf::Sprite* passport_character;
-	sf::Texture* animals = new sf::Texture[3];
-	sf::Texture* passports = new sf::Texture[3];
 	sf::Sprite* dragged = nullptr;
 	sf::Vector2f drag_offset;
-	bool passport_accepted;
-	bool passport_rejected;
-	bool should_accept;
-
-
-
+	int tally = 0;
+	sf::Text tally_text;
 	GameObject background;
 	PassportObject passport;
+	CharacterObject character;
+	GameObject stamps;
+	bool show_stamps = false;
+	bool allow_return = false;
+	std::vector<int> indices;
+	bool next_character = false;;
 
 };
 

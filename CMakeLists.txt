@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(SFML)    # Makes sure SFML and its dependencies are a
 
 #---- File management & .exe creation ----#
 
-set(SOURCE_FILES src/main.cpp src/Game.cpp src/Game.h "src/GameObject.cpp" "src/GameObject.h" "src/PassportObject.cpp" "src/PassportObject.h")  # Sets variable SOURCE_FILES to hold names & locations of files that need to be compiled into the application
+set(SOURCE_FILES src/main.cpp src/Game.cpp src/Game.h "src/GameObject.cpp" "src/GameObject.h" "src/PassportObject.cpp" "src/PassportObject.h" "src/CharacterObject.cpp" "src/CharacterObject.h")  # Sets variable SOURCE_FILES to hold names & locations of files that need to be compiled into the application
 add_executable(Critter_Crossing ${SOURCE_FILES})  # Names the application and tells compiler which source files to use
 
 target_link_libraries(Critter_Crossing PRIVATE sfml-graphics sfml-window sfml-system sfml-network sfml-audio) # Links the SFML libraries we need to our application
