@@ -17,6 +17,7 @@ bool Game::init()
 	//init background
 	background.initSprite("../Data/Images/background.png");
 	background.getSprite()->setPosition(0, 0);
+	//init stamps
 	stamps.initSprite("../Data/Images/stamps.png");
 	stamps.getSprite()->setScale(0.25, 0.25);
 
@@ -24,37 +25,110 @@ bool Game::init()
 	indices = character.generateCharacter();
 	passport.initSprite(indices);
 
+	state = MAIN_MENU;
+	lives = 3;
+	tally = 0;
+
+	title_text = text_objects.makeText("Critter Crossing", 100, sf::Color::White);
+	title_text.setPosition(50, 20);
+
+	lost_text = text_objects.makeText("You Lose!", 100, sf::Color::Red);
+	lost_text.setPosition(50, 20);
+
+	won_text = text_objects.makeText("You Win!", 100, sf::Color::Green);
+	won_text.setPosition(50, 20);
+
+	exit_button.initSprite("../Data/Images/exit_button.png");
+	exit_button.getSprite()->setPosition(window.getSize().x - exit_button.getSprite()->getGlobalBounds().width - 40, 40);
+
+	play_button.initSprite("../Data/Images/play_button.png");
+	play_button.getSprite()->setPosition(window.getSize().x / 2 - play_button.getSprite()->getGlobalBounds().width / 2, window.getSize().y / 2 - play_button.getSprite()->getGlobalBounds().height / 2);
+
+	replay_button.initSprite("../Data/Images/replay_button.png");
+	replay_button.getSprite()->setPosition(window.getSize().x / 2 - replay_button.getSprite()->getGlobalBounds().width / 2, window.getSize().y / 2 - replay_button.getSprite()->getGlobalBounds().height / 2);
+
 	return true;
 }
 
 void Game::update(float dt)
 {
-	if (dragged != nullptr)
+	if (state == MAIN_MENU)
 	{
-		passport.dragPassport(window, drag_offset);
-	}
-	std::string tally_string = std::to_string(tally);
-	tally_string = "Tally: " + tally_string;
-	tally_text = background.makeText(tally_string, 30, sf::Color::Black);
-	tally_text.setPosition(10, 10);
-	if (next_character)
-	{
-		indices = character.generateCharacter();
-		passport.initSprite(indices);
 
-		next_character = false;
+	}
+	if (state == PLAY)
+	{
+		// if something is being dragged
+		if (dragged != nullptr)
+		{
+			passport.dragPassport(window, drag_offset);
+		}
+		// refresh on screen text
+		std::string lives_string = std::to_string(lives);
+		lives_string = "Lives: " + lives_string;
+		lives_text = background.makeText(lives_string, 30, sf::Color::Black);
+		lives_text.setPosition(10, 10);
+
+		std::string tally_string = std::to_string(tally);
+		tally_string = "Tally: " + tally_string;
+		tally_text = background.makeText(tally_string, 30, sf::Color::Black);
+		tally_text.setPosition(window.getSize().x - 10 - tally_text.getGlobalBounds().width, 10);
+
+		// if the passport has been handed back
+		if (next_character)
+		{
+			indices = character.generateCharacter();
+			passport.initSprite(indices);
+
+			next_character = false;
+		}
+		if (lives <= 0)
+		{
+			state = LOSE;
+		}
+		if (tally >= 10)
+		{
+			state = WIN;
+		}
+	}
+	if (state == LOSE or state == WIN)
+	{
+		lives = 3;
+		tally = 0;
 	}
 }
 
 void Game::render()
 {
-	window.draw(*background.getSprite());
-	window.draw(tally_text);
-	character.renderCharacter(window);
-	passport.renderPassport(window);
-	if (show_stamps)
+	if (state == MAIN_MENU)
 	{
-		window.draw(*stamps.getSprite());
+		window.draw(title_text);
+		window.draw(*exit_button.getSprite());
+		window.draw(*play_button.getSprite());
+	}
+	if (state == PLAY)
+	{
+		window.draw(*background.getSprite());
+		window.draw(lives_text);
+		window.draw(tally_text);
+		character.renderCharacter(window);
+		passport.renderPassport(window);
+		if (show_stamps)
+		{
+			window.draw(*stamps.getSprite());
+		}
+	}
+	if (state == LOSE)
+	{
+		window.draw(lost_text);
+		window.draw(*replay_button.getSprite());
+		window.draw(*exit_button.getSprite());
+	}
+	if (state == WIN)
+	{
+		window.draw(won_text);
+		window.draw(*replay_button.getSprite());
+		window.draw(*exit_button.getSprite());
 	}
 }
 
@@ -63,70 +137,107 @@ void Game::mousePressed(sf::Event event)
 	sf::Vector2i click = sf::Mouse::getPosition(window);
 	sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
 
-	if (event.mouseButton.button == sf::Mouse::Left)
+	if (state == MAIN_MENU)
 	{
-		if (passport.getSprite()->getGlobalBounds().contains(clickf))
+		if (event.mouseButton.button == sf::Mouse::Left) //left click...
 		{
-			dragged = passport.getSprite();
-			drag_offset = clickf - passport.getSprite()->getPosition();
-		}
-		if (show_stamps)
-		{
-			if (stamps.getSprite()->getGlobalBounds().contains(clickf))
+			if (exit_button.getSprite()->getGlobalBounds().contains(clickf)) //... on x
 			{
-				if (passport.is_stamped == "")
+				window.close();
+			}
+			if (play_button.getSprite()->getGlobalBounds().contains(clickf)) //... on x
+			{
+				state = PLAY;
+			}
+		}
+	}
+	if (state == PLAY)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left) //left click...
+		{
+			if (passport.getSprite()->getGlobalBounds().contains(clickf)) //... on passport
+			{
+				dragged = passport.getSprite();
+				drag_offset = clickf - passport.getSprite()->getPosition();
+			}
+			if (show_stamps) //... while stamps are shown ...
+			{
+				if (stamps.getSprite()->getGlobalBounds().contains(clickf)) //.. on a stamp ...
 				{
-					if (clickf.y < stamps.getSprite()->getPosition().y + stamps.getSprite()->getGlobalBounds().height / 2)
+					if (passport.is_stamped == "") //... when passport isnt already stamped...
 					{
-						passport.is_stamped = "accept";
-						allow_return = true;
-					}
-					else
-					{
-						passport.is_stamped = "deny";
+						if (clickf.y < stamps.getSprite()->getPosition().y + stamps.getSprite()->getGlobalBounds().height / 2)
+						{ //... on the top half of the stamps sprite
+							passport.is_stamped = "accept";
+						}
+						else
+						{ //... on the bottom half of the stamps sprite
+							passport.is_stamped = "deny";
+						}
 						allow_return = true;
 					}
 				}
+				show_stamps = false;
 			}
-			show_stamps = false;
+		}
+		if (event.mouseButton.button == sf::Mouse::Right) //right click shows stamps
+		{
+			show_stamps = true;
+			stamps.getSprite()->setPosition(clickf);
 		}
 	}
-	if (event.mouseButton.button == sf::Mouse::Right)
+	if (state == LOSE or state == WIN)
 	{
-		show_stamps = true;
-		stamps.getSprite()->setPosition(clickf);
+		if (event.mouseButton.button == sf::Mouse::Left) //left click...
+		{
+			if (replay_button.getSprite()->getGlobalBounds().contains(clickf)) //... on passport
+			{
+				state = PLAY;
+				lives = 3;
+				tally = 0;
+				next_character = true;
+			}
+		}
+		if (exit_button.getSprite()->getGlobalBounds().contains(clickf)) //... on x
+		{
+			window.close();
+		}
 	}
 }
 
 void Game::mouseReleased(sf::Event event)
-{//get the click position
-	sf::Vector2i click = sf::Mouse::getPosition(window);
-	sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
+{
+	if (state == PLAY)
+	{   // get the click position
+		sf::Vector2i click = sf::Mouse::getPosition(window);
+		sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
 
-	if (passport.getSprite()->getGlobalBounds().contains(clickf))
-	{
-		dragged = nullptr;
+		if (passport.getSprite()->getGlobalBounds().contains(clickf)) // if you let go of the passport ...
+		{
+			dragged = nullptr; //nothing is being dragged anymore
+
+			if (allow_return and character.getSprite()->getGlobalBounds().contains(clickf))
+			{   //... over the character while trying to return it
+				if (passport.accept and passport.is_stamped == "deny") //if youre correct
+				{
+					lives--;
+					tally = 0;
+				}
+				else if (!passport.accept and passport.is_stamped == "accept") //if youre correct
+				{
+					lives--;
+					tally = 0;
+				}
+				else
+				{
+					tally++;
+				}
+				// move to the next character
+				next_character = true;
+				allow_return = false;
+			}
+		}
 	}
-	if (allow_return and character.getSprite()->getGlobalBounds().contains(clickf))
-	{
-		if (passport.accept and passport.is_stamped == "accept")
-		{
-			tally++;
-		}
-		else if (!passport.accept and passport.is_stamped == "deny")
-		{
-			tally++;
-		}
-		else
-		{
-			tally = 0;
-		}
-
-		next_character = true;
-		allow_return = false;
-	}
-
-
 }
 
 void Game::keyPressed(sf::Event event)
@@ -134,6 +245,10 @@ void Game::keyPressed(sf::Event event)
 	if (event.key.code == sf::Keyboard::Escape)
 	{
 		window.close();
+	}
+	if (event.key.code == sf::Keyboard::Enter)
+	{
+		state = PLAY;
 	}
 }
 

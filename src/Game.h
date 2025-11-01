@@ -24,16 +24,31 @@ class Game
 	sf::RenderWindow& window;
 	sf::Sprite* dragged = nullptr;
 	sf::Vector2f drag_offset;
-	int tally = 0;
+	std::vector<int> indices;
+	sf::Text lives_text;
 	sf::Text tally_text;
+	sf::Text title_text;
+	sf::Text lost_text;
+	sf::Text won_text;
 	GameObject background;
+	GameObject text_objects;
+	GameObject exit_button;
+	GameObject play_button;
+	GameObject replay_button;
+	GameObject stamps;
 	PassportObject passport;
 	CharacterObject character;
-	GameObject stamps;
+	int lives = 0;
+	int tally = 0;
 	bool show_stamps = false;
 	bool allow_return = false;
-	std::vector<int> indices;
-	bool next_character = false;;
+	bool next_character = false;
+
+	enum GameState
+	{
+		MAIN_MENU, PLAY, WIN, LOSE
+	};
+	GameState state;
 
 };
 
