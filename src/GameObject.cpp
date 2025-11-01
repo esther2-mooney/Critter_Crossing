@@ -12,11 +12,12 @@ void GameObject::initSprite(std::string filename)
 {
 	texture.loadFromFile(filename);
 	sprite.setTexture(texture, true);
+	sprite_ptr = std::make_unique<sf::Sprite>(sprite);
 }
 
-sf::Sprite* GameObject::getSprite()
+std::unique_ptr<sf::Sprite> GameObject::getSprite()
 {
-	return &sprite;
+	return sprite_ptr; // deleted function?
 }
 
 sf::Text GameObject::makeText(sf::String string, int size, sf::Color colour)

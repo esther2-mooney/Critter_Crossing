@@ -191,7 +191,7 @@ void PassportObject::dragPassport(sf::RenderWindow& window, sf::Vector2f drag_of
 	position = {drag_position.x, drag_position.y};
 }
 
-sf::Sprite* PassportObject::getSprite()
+std::unique_ptr<sf::Sprite> PassportObject::getSprite()
 {
 	return front.getSprite();
 }

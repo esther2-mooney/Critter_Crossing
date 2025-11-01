@@ -9,7 +9,7 @@ class CharacterObject : public GameObject
 	public:
 	std::vector<int> generateCharacter();
 	void renderCharacter(sf::RenderWindow& window);
-	sf::Sprite* getSprite();
+	std::unique_ptr<sf::Sprite> getSprite();
 
 	GameObject character;
 
