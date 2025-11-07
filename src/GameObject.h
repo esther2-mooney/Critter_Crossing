@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <memory>
 
 class GameObject
 {
@@ -8,7 +7,7 @@ class GameObject
 	GameObject();
 	~GameObject();
 	void initSprite(std::string filename);
-	std::unique_ptr<sf::Sprite> getSprite();
+	sf::Sprite* getSprite();
 	sf::Text makeText(sf::String string, int size, sf::Color colour);
 	sf::Font font;
 
@@ -16,7 +15,6 @@ class GameObject
 	sf::Texture texture;
 	std::string temp_filename;
 	sf::Sprite sprite;
-	std::unique_ptr<sf::Sprite> sprite_ptr;
 	std::string animals[30] =
 	{"bear", "buffalo", "chick", "chicken", "cow", "crocodile", "dog", "duck", "elephant", "frog",
 		"giraffe", "goat", "gorilla", "hippo", "horse", "monkey", "moose", "narwhal", "owl", "panda",

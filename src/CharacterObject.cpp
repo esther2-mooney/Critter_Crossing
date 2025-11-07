@@ -24,7 +24,7 @@ void CharacterObject::renderCharacter(sf::RenderWindow& window)
 	window.draw(*character.getSprite());
 }
 
-std::unique_ptr<sf::Sprite> CharacterObject::getSprite()
+sf::Sprite* CharacterObject::getSprite()
 {
 	return character.getSprite();
 }

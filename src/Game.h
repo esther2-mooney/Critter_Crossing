@@ -22,7 +22,7 @@ class Game
 
 	private:
 	sf::RenderWindow& window;
-	std::unique_ptr<sf::Sprite> dragged = nullptr;
+	sf::Sprite* dragged = nullptr;
 	sf::Vector2f drag_offset;
 	std::vector<int> indices;
 	sf::Text lives_text;
