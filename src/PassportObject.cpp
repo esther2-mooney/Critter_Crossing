@@ -195,11 +195,7 @@ void PassportObject::dragPassport(sf::RenderWindow& window, sf::Vector2f drag_of
 	position = {drag_position.x, drag_position.y};
 }
 
-<<<<<<< Updated upstream
-sf::Sprite* PassportObject::getSprite()
-=======
 std::shared_ptr<sf::Sprite> PassportObject::getSprite()
->>>>>>> Stashed changes
 {
 	return front.getSprite();
 }

@@ -7,11 +7,7 @@ class GameObject
 	GameObject();
 	~GameObject();
 	void initSprite(std::string filename);
-<<<<<<< Updated upstream
-	sf::Sprite* getSprite();
-=======
 	std::shared_ptr<sf::Sprite> getSprite();
->>>>>>> Stashed changes
 	sf::Text makeText(sf::String string, int size, sf::Color colour);
 	sf::Font font;
 
@@ -19,10 +15,7 @@ class GameObject
 	sf::Texture texture;
 	std::string temp_filename;
 	sf::Sprite sprite;
-<<<<<<< Updated upstream
-=======
 	std::shared_ptr<sf::Sprite> sprite_ptr;
->>>>>>> Stashed changes
 	std::string animals[30] =
 	{"bear", "buffalo", "chick", "chicken", "cow", "crocodile", "dog", "duck", "elephant", "frog",
 		"giraffe", "goat", "gorilla", "hippo", "horse", "monkey", "moose", "narwhal", "owl", "panda",

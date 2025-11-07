@@ -10,11 +10,7 @@ class PassportObject : public GameObject
 	void changePhoto();
 	void renderPassport(sf::RenderWindow& game_window);
 	void dragPassport(sf::RenderWindow& window, sf::Vector2f drag_offset);
-<<<<<<< Updated upstream
-	sf::Sprite* getSprite();
-=======
 	std::shared_ptr<sf::Sprite> getSprite();
->>>>>>> Stashed changes
 	void ifShapeIndex(int shape, int animal);
 	bool accept = false;
 	std::string is_stamped = "";

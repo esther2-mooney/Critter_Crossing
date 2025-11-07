@@ -22,11 +22,7 @@ class Game
 
 	private:
 	sf::RenderWindow& window;
-<<<<<<< Updated upstream
-	sf::Sprite* dragged = nullptr;
-=======
 	std::shared_ptr<sf::Sprite> dragged = nullptr;
->>>>>>> Stashed changes
 	sf::Vector2f drag_offset;
 	std::vector<int> indices;
 	sf::Text lives_text;
