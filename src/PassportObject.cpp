@@ -5,6 +5,7 @@ void PassportObject::initSprite(std::vector<int> indices)
 	back.initSprite("../Data/Images/passport_back.png");
 	back.getSprite()->setScale(0.4, 0.4);
 	back.getSprite()->setPosition(position);
+	photo.initSprite("../Data/Images/c_animals/rhino.png");
 	generateCharacter(indices);
 	front.initSprite("../Data/Images/passport_front.png");
 	front.getSprite()->setScale(0.4, 0.4);
@@ -52,7 +53,6 @@ void PassportObject::generateCharacter(std::vector<int> indices)
 void PassportObject::changePhoto()
 {
 	position = {500,100};
-	photo.getSprite()->setScale(0.8, 0.8);
 	if (accept)
 	{ // if the passport should be accepted
 		ifShapeIndex(shape_index, animal_index);
@@ -144,13 +144,17 @@ void PassportObject::changePhoto()
 	species_written = do_text.makeText(species_string, 25, sf::Color::Black);
 	colour_written = do_text.makeText(colour_string, 25, sf::Color::Black);
 
+	float width = photo.getSprite()->getGlobalBounds().width;
+	float scale = 125 / width;
+	photo.getSprite()->setScale(scale, scale);
+
 	offset.x = (285 * 0.4) - photo.getSprite()->getGlobalBounds().width / 2;
 	offset.y = (1050 * 0.4) - photo.getSprite()->getGlobalBounds().height / 2;
+
 }
 
 void PassportObject::renderPassport(sf::RenderWindow& window)
 {
-	window.draw(*character.getSprite());
 	back.getSprite()->setPosition(position);
 	window.draw(*back.getSprite());
 	photo.getSprite()->setPosition(position.x + offset.x, position.y + offset.y);
@@ -170,7 +174,7 @@ void PassportObject::renderPassport(sf::RenderWindow& window)
 	{
 		stamp.initSprite("../Data/Images/accept.png");
 	}
-	else if (is_stamped == "deny")
+	else
 	{
 		stamp.initSprite("../Data/Images/reject.png");
 	}
@@ -191,7 +195,11 @@ void PassportObject::dragPassport(sf::RenderWindow& window, sf::Vector2f drag_of
 	position = {drag_position.x, drag_position.y};
 }
 
+<<<<<<< Updated upstream
 sf::Sprite* PassportObject::getSprite()
+=======
+std::shared_ptr<sf::Sprite> PassportObject::getSprite()
+>>>>>>> Stashed changes
 {
 	return front.getSprite();
 }

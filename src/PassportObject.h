@@ -10,7 +10,11 @@ class PassportObject : public GameObject
 	void changePhoto();
 	void renderPassport(sf::RenderWindow& game_window);
 	void dragPassport(sf::RenderWindow& window, sf::Vector2f drag_offset);
+<<<<<<< Updated upstream
 	sf::Sprite* getSprite();
+=======
+	std::shared_ptr<sf::Sprite> getSprite();
+>>>>>>> Stashed changes
 	void ifShapeIndex(int shape, int animal);
 	bool accept = false;
 	std::string is_stamped = "";
@@ -35,7 +39,6 @@ class PassportObject : public GameObject
 	GameObject back;
 	GameObject photo;
 	GameObject front;
-	GameObject character;
 	GameObject stamp;
 
 	GameObject do_text;
@@ -46,11 +49,11 @@ class PassportObject : public GameObject
 	sf::String shape_string;
 	sf::String colour_string;
 
-	int animal_index;
-	int shape_index;
-	bool right_species;
-	bool right_shape;
-	bool right_colour;
+	int animal_index = 0;
+	int shape_index = 0;
+	bool right_species = false;
+	bool right_shape = false;
+	bool right_colour = false;
 
 	std::string animal_colours[30] =
 	{"brown", "brown", "yellow", "white", "b&w", "green", "grey", "green", "grey", "green",

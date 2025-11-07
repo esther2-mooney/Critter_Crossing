@@ -24,7 +24,11 @@ void CharacterObject::renderCharacter(sf::RenderWindow& window)
 	window.draw(*character.getSprite());
 }
 
+<<<<<<< Updated upstream
 sf::Sprite* CharacterObject::getSprite()
+=======
+std::shared_ptr<sf::Sprite> CharacterObject::getSprite()
+>>>>>>> Stashed changes
 {
 	return character.getSprite();
 }

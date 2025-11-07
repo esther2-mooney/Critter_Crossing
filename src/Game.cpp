@@ -182,8 +182,11 @@ void Game::mousePressed(sf::Event event)
 		}
 		if (event.mouseButton.button == sf::Mouse::Right) //right click shows stamps
 		{
-			show_stamps = true;
-			stamps.getSprite()->setPosition(clickf);
+			if (passport.getSprite()->getGlobalBounds().contains(clickf)) //... on passport
+			{
+				show_stamps = true;
+				stamps.getSprite()->setPosition(clickf);
+			}
 		}
 	}
 	if (state == LOSE or state == WIN)
