@@ -15,20 +15,6 @@ class PassportObject : public GameObject
 	bool accept = false;
 	std::string is_stamped = "";
 
-
-	// make it more likely to be correct (like 50/50)
-	// change "age" to colour
-	//add an array for colours so its easier to mkae it correct or nah
-	//eugh
-
-	//generate character
-	// save value of animal type 
-	// 50% chnace that its completely correct
-	// shape is 50/50 anyway
-	// colour if 50% right, 50% random
-
-
-
 	private:
 	sf::Vector2f position;
 	sf::Vector2f offset;

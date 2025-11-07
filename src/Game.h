@@ -18,7 +18,6 @@ class Game
 	void mousePressed(sf::Event event);
 	void mouseReleased(sf::Event event);
 	void keyPressed(sf::Event event);
-	//void dragSprite(sf::Sprite* sprite);
 
 	private:
 	sf::RenderWindow& window;
