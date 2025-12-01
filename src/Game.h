@@ -18,6 +18,8 @@ class Game
 	void mousePressed(sf::Event event);
 	void mouseReleased(sf::Event event);
 	void keyPressed(sf::Event event);
+	void resetLevel();
+	void resetGame();
 
 	private:
 	sf::RenderWindow& window;
@@ -37,11 +39,13 @@ class Game
 	GameObject stamps;
 	PassportObject passport;
 	CharacterObject character;
+
 	int lives = 0;
 	int tally = 0;
 	bool show_stamps = false;
 	bool allow_return = false;
 	bool next_character = false;
+	bool move_onscreen = false;
 
 	enum GameState
 	{

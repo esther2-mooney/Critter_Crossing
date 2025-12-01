@@ -28,6 +28,7 @@ bool Game::init()
 	state = MAIN_MENU;
 	lives = 3;
 	tally = 0;
+	move_onscreen = true;
 
 	title_text = text_objects.makeText("Critter Crossing", 100, sf::Color::White);
 	title_text.setPosition(50, 20);
@@ -79,8 +80,19 @@ void Game::update(float dt)
 		{
 			indices = character.generateCharacter();
 			passport.initSprite(indices);
-
 			next_character = false;
+			move_onscreen = true;
+		}
+		if (move_onscreen)
+		{
+			if (character.getSprite()->getPosition().x <= 250 - character.getSprite()->getGlobalBounds().width / 2)
+			{
+				character.setCharacterPosition(character.getSprite()->getPosition().x + 10, character.getSprite()->getPosition().y + (10 * sin(0.03 * character.getSprite()->getPosition().x)));
+			}
+			else
+			{
+				move_onscreen = false;
+			}
 		}
 		if (lives <= 0)
 		{
@@ -91,11 +103,12 @@ void Game::update(float dt)
 			state = WIN;
 		}
 	}
-	if (state == LOSE or state == WIN)
+	/*if (state == LOSE or state == WIN)
 	{
 		lives = 3;
 		tally = 0;
-	}
+		move_count = 0;
+	}*/
 }
 
 void Game::render()
@@ -180,12 +193,15 @@ void Game::mousePressed(sf::Event event)
 				show_stamps = false;
 			}
 		}
-		if (event.mouseButton.button == sf::Mouse::Right) //right click shows stamps
+		if (!move_onscreen)
 		{
-			if (passport.getSprite()->getGlobalBounds().contains(clickf)) //... on passport
+			if (event.mouseButton.button == sf::Mouse::Right) //right click shows stamps
 			{
-				show_stamps = true;
-				stamps.getSprite()->setPosition(clickf);
+				if (passport.getSprite()->getGlobalBounds().contains(clickf)) //... on passport
+				{
+					show_stamps = true;
+					stamps.getSprite()->setPosition(clickf);
+				}
 			}
 		}
 	}
@@ -195,9 +211,7 @@ void Game::mousePressed(sf::Event event)
 		{
 			if (replay_button.getSprite()->getGlobalBounds().contains(clickf)) //... on passport
 			{
-				state = PLAY;
-				lives = 3;
-				tally = 0;
+				resetGame();
 				next_character = true;
 			}
 		}
@@ -253,6 +267,25 @@ void Game::keyPressed(sf::Event event)
 	{
 		state = PLAY;
 	}
+	if (event.key.code == sf::Keyboard::T)
+	{
+		next_character = !next_character;
+	}
+}
+
+void Game::resetLevel()
+{
+	dragged = nullptr;
+}
+
+void Game::resetGame()
+{
+	resetLevel();
+	state = PLAY;
+	lives = 3;
+	tally = 0;
+
+
 }
 
 
