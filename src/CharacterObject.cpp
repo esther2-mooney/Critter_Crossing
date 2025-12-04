@@ -13,7 +13,7 @@ std::vector<int> CharacterObject::generateCharacter()
 	{
 		character.initSprite("../Data/Images/s_animals/" + animals[animal_index] + ".png");
 	}
-	character.getSprite()->setPosition(-200 - character.getSprite()->getGlobalBounds().width / 2, 300 - character.getSprite()->getGlobalBounds().height / 2);
+	character.getSprite()->setPosition(-200 - character.getSprite()->getGlobalBounds().width / 2, 210 - character.getSprite()->getGlobalBounds().height / 2);
 	character.getSprite()->setScale(1.6, 1.6);
 	std::vector<int> indices = {animal_index, shape_index};
 	return(indices);

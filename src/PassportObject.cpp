@@ -52,7 +52,7 @@ void PassportObject::generateCharacter(std::vector<int> indices)
 
 void PassportObject::changePhoto()
 {
-	position = {500,100};
+	position = {600,100};
 	if (accept)
 	{ // if the passport should be accepted
 		ifShapeIndex(shape_index, animal_index);

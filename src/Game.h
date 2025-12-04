@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "PassportObject.h"
 #include "CharacterObject.h"
+#include <thread>
+#include<chrono>
 
 class Game
 {
@@ -32,6 +34,8 @@ class Game
 	sf::Text lost_text;
 	sf::Text won_text;
 	GameObject background;
+	GameObject backdrop_1;
+	GameObject backdrop_2;
 	GameObject text_objects;
 	GameObject exit_button;
 	GameObject play_button;
@@ -39,6 +43,7 @@ class Game
 	GameObject stamps;
 	PassportObject passport;
 	CharacterObject character;
+	GameObject bubble;
 
 	int lives = 0;
 	int tally = 0;
@@ -46,13 +51,21 @@ class Game
 	bool allow_return = false;
 	bool next_character = false;
 	bool move_onscreen = false;
+	bool move_offscreen = false;
+	bool character_enters = false;//???
+	bool do_emotes = false;
+	int emote_count = 0;
 
 	enum GameState
 	{
 		MAIN_MENU, PLAY, WIN, LOSE
 	};
 	GameState state;
-
+	enum Emote
+	{
+		HAPPY, SAD, ANGRY, EVIL, NONE
+	};
+	Emote emote;
 };
 
 #endif // PASSPORT_GAME_H

@@ -38,8 +38,8 @@ class PassportObject : public GameObject
 	bool right_colour = false;
 
 	std::string animal_colours[30] =
-	{"brown", "brown", "yellow", "white", "b&w", "green", "grey", "green", "grey", "green",
-		"yellow", "brown", "black", "blue", "brown", "brown", "brown", "blue", "brown", "b&w",
-		"red", "b&w", "pink", "grey", "grey", "brown", "green", "brown", "b&w", "b&w"};
-	std::string all_colours[10] = {"brown", "yellow", "white", "b&w", "grey", "green", "blue", "pink", "black", "red"};
+	{"brown", "brown", "yellow", "white", "B&W", "green", "grey", "green", "grey", "green",
+		"yellow", "brown", "black", "blue", "brown", "brown", "brown", "blue", "brown", "B&W",
+		"red", "B&W", "pink", "grey", "grey", "brown", "green", "brown", "B&W", "B&W"};
+	std::string all_colours[10] = {"brown", "yellow", "white", "B&W", "grey", "green", "blue", "pink", "black", "red"};
 };
