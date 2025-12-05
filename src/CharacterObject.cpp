@@ -32,9 +32,3 @@ void CharacterObject::setCharacterPosition(float x, float y)
 {
 	character.getSprite()->setPosition(x, y);
 }
-
-
-void CharacterObject::moveCharacter()
-{
-
-}

@@ -39,23 +39,25 @@ int main()
 		{
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
+			{
 				window.close();
-
+			}
+			// key pressed event
 			if (event.type == sf::Event::KeyPressed)
 			{
 				game.keyPressed(event);
 			}
-
+			// mouse pressed event
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
 				game.mousePressed(event);
 			}
+			// mouse released event
 			if (event.type == sf::Event::MouseButtonReleased)
 			{
 				game.mouseReleased(event);
 			}
 		}
-
 
 		//'update' element of the game loop
 		game.update(dt);
@@ -66,6 +68,8 @@ int main()
 		game.render();
 		window.display();
 	}
+
+	game.~Game();
 
 	return 0;
 }

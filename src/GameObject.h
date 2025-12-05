@@ -13,7 +13,6 @@ class GameObject
 
 	protected:
 	sf::Texture texture;
-	std::string temp_filename;
 	sf::Sprite sprite;
 	std::shared_ptr<sf::Sprite> sprite_ptr;
 	std::string animals[30] =

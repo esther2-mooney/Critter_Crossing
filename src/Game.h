@@ -33,7 +33,6 @@ class Game
 	sf::Text title_text;
 	sf::Text lost_text;
 	sf::Text won_text;
-	GameObject background;
 	GameObject backdrop_1;
 	GameObject backdrop_2;
 	GameObject text_objects;
@@ -49,23 +48,17 @@ class Game
 	int tally = 0;
 	bool show_stamps = false;
 	bool allow_return = false;
-	bool next_character = false;
-	bool move_onscreen = false;
-	bool move_offscreen = false;
-	bool character_enters = false;//???
 	bool do_emotes = false;
 	int emote_count = 0;
+	bool move_offscreen = false;
+	bool next_character = false;
+	bool move_onscreen = false;
 
 	enum GameState
 	{
 		MAIN_MENU, PLAY, WIN, LOSE
 	};
 	GameState state;
-	enum Emote
-	{
-		HAPPY, SAD, ANGRY, EVIL, NONE
-	};
-	Emote emote;
 };
 
 #endif // PASSPORT_GAME_H

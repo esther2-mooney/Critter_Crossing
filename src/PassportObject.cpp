@@ -17,12 +17,10 @@ void PassportObject::generateCharacter(std::vector<int> indices)
 	if (rand() % 2 == 0)
 	{
 		accept = false;
-		std::cout << "Accept = false \n";
 	}
 	else
 	{
 		accept = true;
-		std::cout << "Accept = true \n";
 	}
 
 	animal_index = indices[0];

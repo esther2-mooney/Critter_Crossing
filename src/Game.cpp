@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game(sf::RenderWindow& game_window)
-	: window(game_window)
+	: window(game_window), state(MAIN_MENU)
 {
 	srand(time(NULL));
 }
@@ -13,8 +13,7 @@ Game::~Game()
 bool Game::init()
 {
 	int tally = 0;
-	//init background
-	background.initSprite("../Data/Images/background.png");
+	//init backgrounds (layered to hide character moving off screen)
 	backdrop_1.initSprite("../Data/Images/backdrop_1.png");
 	backdrop_2.initSprite("../Data/Images/backdrop_2.png");
 	backdrop_1.getSprite()->setPosition(0, 0);
@@ -28,12 +27,12 @@ bool Game::init()
 	indices = character.generateCharacter();
 	passport.initSprite(indices);
 
-	emote = NONE;
+	// setup values
+	resetGame();
 	state = MAIN_MENU;
-	lives = 3;
-	tally = 0;
 	move_onscreen = true;
 
+	// init text
 	title_text = text_objects.makeText("Critter Crossing", 100, sf::Color::White);
 	title_text.setPosition(50, 20);
 
@@ -43,6 +42,7 @@ bool Game::init()
 	won_text = text_objects.makeText("You Win!", 100, sf::Color::Green);
 	won_text.setPosition(50, 20);
 
+	// init buttons
 	exit_button.initSprite("../Data/Images/exit_button.png");
 	exit_button.getSprite()->setPosition(window.getSize().x - exit_button.getSprite()->getGlobalBounds().width - 40, 40);
 
@@ -52,17 +52,14 @@ bool Game::init()
 	replay_button.initSprite("../Data/Images/replay_button.png");
 	replay_button.getSprite()->setPosition(window.getSize().x / 2 - replay_button.getSprite()->getGlobalBounds().width / 2, window.getSize().y / 2 - replay_button.getSprite()->getGlobalBounds().height / 2);
 
-	bubble.initSprite(".../Data/Images/emotes/emote_.png");
+	// init emote bubble 
+	bubble.initSprite("../Data/Images/emotes/emote_heart.png");
 
 	return true;
 }
 
 void Game::update(float dt)
 {
-	if (state == MAIN_MENU)
-	{
-
-	}
 	if (state == PLAY)
 	{
 		// if something is being dragged
@@ -73,43 +70,18 @@ void Game::update(float dt)
 		// refresh on screen text
 		std::string lives_string = std::to_string(lives);
 		lives_string = "Lives: " + lives_string;
-		lives_text = backdrop_2.makeText(lives_string, 30, sf::Color::Black);
+		lives_text = text_objects.makeText(lives_string, 30, sf::Color::Black);
 		lives_text.setPosition(30, 20);
 
 		std::string tally_string = std::to_string(tally);
 		tally_string = "Tally: " + tally_string;
-		tally_text = backdrop_2.makeText(tally_string, 30, sf::Color::Black);
+		tally_text = text_objects.makeText(tally_string, 30, sf::Color::Black);
 		tally_text.setPosition(window.getSize().x - 30 - tally_text.getGlobalBounds().width, 20);
 
-		// if the passport has been handed back
-		if (next_character)
-		{
-			do_emotes = true;
-			next_character = false;
-			if (emote == SAD)
-			{
-				bubble.initSprite("../Data/Images/emotes/emote_drops.png");
-			}
-			if (emote == ANGRY)
-			{
-				bubble.initSprite("../Data/Images/emotes/emote_anger.png");
-			}
-			if (emote == HAPPY)
-			{
-				bubble.initSprite("../Data/Images/emotes/emote_heart.png");
-			}
-			if (emote == EVIL)
-			{
-				bubble.initSprite("../Data/Images/emotes/emote_question.png");
-			}
-			emote_count = 0;
-			bubble.getSprite()->setScale(2.5, 2.5);
-			bubble.getSprite()->setPosition(450, 50);
-			//add character handing passport over???
-		}
 		if (do_emotes)
 		{
-			if (emote_count / 2 == 0)
+			// change rotation every 400ms for emphasis
+			if (emote_count % 2 == 0)
 			{
 				bubble.getSprite()->setRotation(40);
 			}
@@ -117,43 +89,53 @@ void Game::update(float dt)
 			{
 				bubble.getSprite()->setRotation(20);
 			}
-			std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			std::this_thread::sleep_for(std::chrono::milliseconds(400));
+			// loop 5 times
 			if (emote_count >= 5)
 			{
 				do_emotes = false;
 				move_offscreen = true;
+				// then character moves off screen
 			}
+			// increment
 			emote_count++;
 		}
 		if (move_offscreen)
 		{
-			if (emote == SAD || emote == ANGRY)
+			if (character.getSprite()->getPosition().x >= -10 - character.getSprite()->getGlobalBounds().width and character.getSprite()->getPosition().x <= window.getSize().x / 2 + 10)
 			{
-				if (character.getSprite()->getPosition().x >= -10 - character.getSprite()->getGlobalBounds().width)
+				// if you deny the character they have to go back to the left
+				if (passport.is_stamped == "deny")
 				{
 					character.setCharacterPosition(character.getSprite()->getPosition().x - 10, character.getSprite()->getPosition().y + (10 * sin(0.03 * character.getSprite()->getPosition().x)));
 				}
 				else
 				{
-					move_onscreen = true;
-					move_offscreen = false;
-					indices = character.generateCharacter();
-					passport.initSprite(indices);
+					character.setCharacterPosition(character.getSprite()->getPosition().x + 10, character.getSprite()->getPosition().y + (10 * sin(0.03 * character.getSprite()->getPosition().x)));
 				}
 			}
 			else
 			{
-				if (character.getSprite()->getPosition().x <= window.getSize().x / 2 + 10)
-				{
-					character.setCharacterPosition(character.getSprite()->getPosition().x + 10, character.getSprite()->getPosition().y + (10 * sin(0.03 * character.getSprite()->getPosition().x)));
-				}
-				else
-				{
-					move_onscreen = true;
-					move_offscreen = false;
-					indices = character.generateCharacter();
-					passport.initSprite(indices);
-				}
+				next_character = true;
+				move_offscreen = false;
+			}
+		}
+		if (next_character)
+		{
+			if (lives <= 0)
+			{
+				state = LOSE;
+			}
+			else if (tally >= 10)
+			{
+				state = WIN;
+			}
+			else
+			{
+				move_onscreen = true;
+				next_character = false;
+				indices = character.generateCharacter();
+				passport.initSprite(indices);
 			}
 		}
 		if (move_onscreen)
@@ -165,24 +147,9 @@ void Game::update(float dt)
 			else
 			{
 				move_onscreen = false;
-				character_enters = false;
 			}
 		}
-		if (lives <= 0)
-		{
-			state = LOSE;
-		}
-		if (tally >= 10)
-		{
-			state = WIN;
-		}
 	}
-	/*if (state == LOSE or state == WIN)
-	{
-		lives = 3;
-		tally = 0;
-		move_count = 0;
-	}*/
 }
 
 void Game::render()
@@ -193,15 +160,13 @@ void Game::render()
 		window.draw(*exit_button.getSprite());
 		window.draw(*play_button.getSprite());
 	}
-	if (state == PLAY)
+	else if (state == PLAY)
 	{
-
 		window.draw(*backdrop_1.getSprite());
 		character.renderCharacter(window);
 		if (do_emotes)
 		{
 			window.draw(*bubble.getSprite());
-
 		}
 		window.draw(*backdrop_2.getSprite());
 		if (!move_offscreen && !move_onscreen && !do_emotes)
@@ -215,15 +180,16 @@ void Game::render()
 			window.draw(*stamps.getSprite());
 		}
 	}
-	if (state == LOSE)
+	else
 	{
-		window.draw(lost_text);
-		window.draw(*replay_button.getSprite());
-		window.draw(*exit_button.getSprite());
-	}
-	if (state == WIN)
-	{
-		window.draw(won_text);
+		if (state == LOSE)
+		{
+			window.draw(lost_text);
+		}
+		if (state == WIN)
+		{
+			window.draw(won_text);
+		}
 		window.draw(*replay_button.getSprite());
 		window.draw(*exit_button.getSprite());
 	}
@@ -248,7 +214,7 @@ void Game::mousePressed(sf::Event event)
 			}
 		}
 	}
-	if (state == PLAY)
+	else if (state == PLAY)
 	{
 		if (event.mouseButton.button == sf::Mouse::Left) //left click...
 		{
@@ -297,7 +263,7 @@ void Game::mousePressed(sf::Event event)
 			}
 		}
 	}
-	if (state == LOSE || state == WIN)
+	else
 	{
 		if (event.mouseButton.button == sf::Mouse::Left) //left click...
 		{
@@ -312,7 +278,6 @@ void Game::mousePressed(sf::Event event)
 			window.close();
 		}
 	}
-	std::cout << click.x << ", " << click.y << "\n";
 }
 
 void Game::mouseReleased(sf::Event event)
@@ -332,30 +297,29 @@ void Game::mouseReleased(sf::Event event)
 				{
 					lives--;
 					tally = 0;
-					emote = ANGRY;
-					std::cout << "angry\n";
+					bubble.initSprite("../Data/Images/emotes/emote_anger.png");
 				}
 				else if (!passport.accept && passport.is_stamped == "accept") //if youre wrong
 				{
 					lives--;
 					tally = 0;
-					emote = EVIL;
-					std::cout << "evil\n";
+					bubble.initSprite("../Data/Images/emotes/emote_question.png");
 				}
 				else if (passport.accept && passport.is_stamped == "accept") //if youre correct
 				{
 					tally++;
-					emote = HAPPY;
-					std::cout << "happy\n";
+					bubble.initSprite("../Data/Images/emotes/emote_heart.png");
 				}
 				else if (!passport.accept && passport.is_stamped == "deny") //if youre correct
 				{
 					tally++;
-					emote = SAD;
-					std::cout << "sad\n";
+					bubble.initSprite("../Data/Images/emotes/emote_faceSad.png");
 				}
-				// move to the next character
-				next_character = true;
+				// move to chcracter emoting
+				emote_count = 0;
+				bubble.getSprite()->setScale(2.5, 2.5);
+				bubble.getSprite()->setPosition(400, 70);
+				do_emotes = true;
 				allow_return = false;
 			}
 		}
@@ -389,18 +353,14 @@ void Game::keyPressed(sf::Event event)
 void Game::resetLevel()
 {
 	dragged = nullptr;
-	emote = NONE;
 }
 
 void Game::resetGame()
 {
 	resetLevel();
-	emote = NONE;
 	state = PLAY;
 	lives = 3;
 	tally = 0;
-
-
 }
 
 
